@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "60511746722",
+    "firebase_url": "https://cablebilling-d8991.firebaseio.com",
+    "project_id": "cablebilling-d8991",
+    "storage_bucket": "cablebilling-d8991.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60511746722:android:e0eb3bfec6873626f275fb",
+        "android_client_info": {
+          "package_name": "com.appsinventiv.cablebilling"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60511746722-kb0prve8dkaq6vf3t42cg1m2or4fi51k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appsinventiv.cablebilling",
+            "certificate_hash": "fa7734f56677f3ea319837d95cad6564d25b63ef"
+          }
+        },
+        {
+          "client_id": "60511746722-k0mvqlducep9da5avclvaq0gj4222t5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSrSlzFzOc4CdZ8aLTvkw6PU7y6hIe-g0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60511746722-k0mvqlducep9da5avclvaq0gj4222t5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
