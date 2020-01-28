@@ -36,7 +36,7 @@ import androidx.core.app.ActivityCompat;
 
 public class AddCustomer extends AppCompatActivity {
     Button save;
-    EditText billAmount, name, phone, address;
+    EditText billAmount, name, phone, address, packageType;
     DatabaseReference mDatabase;
     ArrayList<String> itemList = new ArrayList<>();
 
@@ -54,6 +54,7 @@ public class AddCustomer extends AppCompatActivity {
         name = findViewById(R.id.name);
         phone = findViewById(R.id.phone);
         address = findViewById(R.id.address);
+        packageType = findViewById(R.id.packageType);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         getPermissions();
 
@@ -100,7 +101,7 @@ public class AddCustomer extends AppCompatActivity {
                 phone.getText().toString(),
                 address.getText().toString(),
                 Integer.parseInt(billAmount.getText().toString()),
-                System.currentTimeMillis()
+                System.currentTimeMillis(), packageType.getText().toString()
         );
 
         mDatabase.child("Customers").child(phone.getText().toString()).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -165,7 +166,6 @@ public class AddCustomer extends AppCompatActivity {
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                 .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
                 .withValue(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, name.getText().toString())
-                .withValue(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME, address.getText().toString())
                 .build());
 
         operationList.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)

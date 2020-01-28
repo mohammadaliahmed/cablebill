@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     EditText search;
     RelativeLayout wholeLayout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra("phone", model.getPhone());
                 i.putExtra("address", model.getAddress());
                 i.putExtra("bill", model.getBill());
+                i.putExtra("packageTypeText", model.getPackageType());
                 startActivity(i);
             }
         });
@@ -143,6 +145,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, AddCustomer.class));
             return true;
         }
+//        if (id == R.id.action_settings) {
+//            startActivity(new Intent(MainActivity.this, AddCustomer.class));
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

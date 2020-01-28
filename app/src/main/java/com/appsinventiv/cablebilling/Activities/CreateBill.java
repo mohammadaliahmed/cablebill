@@ -15,6 +15,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +53,7 @@ public class CreateBill extends AppCompatActivity {
 
     TextView userDetails, billAmount, date, number;
 
-    String name, phone, address;
+    String name, phone, address,packageTypeText;
     int bill;
     Button send;
     RelativeLayout billLayout;
@@ -60,6 +62,8 @@ public class CreateBill extends AppCompatActivity {
 
     DatabaseReference mDatabase;
     private String idddd;
+    EditText recievedBy;
+    TextView recievedByText,packageType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +79,11 @@ public class CreateBill extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         userDetails = findViewById(R.id.userDetails);
         billLayout = findViewById(R.id.billLayout);
+        packageType = findViewById(R.id.packageType);
         billAmount = findViewById(R.id.billAmount);
         number = findViewById(R.id.number);
+        recievedByText = findViewById(R.id.recievedByText);
+        recievedBy = findViewById(R.id.recievedBy);
         date = findViewById(R.id.date);
         send = findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
@@ -93,17 +100,36 @@ public class CreateBill extends AppCompatActivity {
 
             }
         });
+        recievedBy.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                recievedByText.setText(s.toString());
+            }
+        });
 
 
         bill = getIntent().getIntExtra("bill", 0);
         name = getIntent().getStringExtra("name");
         phone = getIntent().getStringExtra("phone");
         address = getIntent().getStringExtra("address");
+        packageTypeText = getIntent().getStringExtra("packageTypeText");
         idddd = CommonUtils.getFormattedDateOnl(System.currentTimeMillis()) + phone;
 
 
 //        userDetails.setText("Name: " + name + "\nPhone: " + phone + "\nAddr: " + address);
         number.setText(idddd);
+        packageType.setText(packageTypeText);
         userDetails.setText(name);
         date.setText(CommonUtils.getFormattedDateOnly(System.currentTimeMillis()));
         billAmount.setText(bill + "/-");

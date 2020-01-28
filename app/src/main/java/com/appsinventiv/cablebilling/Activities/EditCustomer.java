@@ -35,7 +35,7 @@ import androidx.core.app.ActivityCompat;
 
 public class EditCustomer extends AppCompatActivity {
     Button save, delete;
-    EditText billAmount, name, phone, address;
+    EditText billAmount, name, phone, address, packageType;
     DatabaseReference mDatabase;
     String userid;
 
@@ -51,6 +51,7 @@ public class EditCustomer extends AppCompatActivity {
         userid = getIntent().getStringExtra("userid");
         save = findViewById(R.id.save);
         delete = findViewById(R.id.delete);
+        packageType = findViewById(R.id.packageType);
         billAmount = findViewById(R.id.billAmount);
         name = findViewById(R.id.name);
         phone = findViewById(R.id.phone);
@@ -97,6 +98,7 @@ public class EditCustomer extends AppCompatActivity {
                     if (model != null) {
                         name.setText(model.getName());
                         phone.setText(model.getPhone());
+                        packageType.setText(model.getPackageType());
                         address.setText(model.getAddress());
                         billAmount.setText("" + model.getBill());
                     }
@@ -111,7 +113,6 @@ public class EditCustomer extends AppCompatActivity {
     }
 
     private void showAlert() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert");
         builder.setMessage("Do you want to delete this customer? ");
@@ -135,7 +136,6 @@ public class EditCustomer extends AppCompatActivity {
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 
     private void saveData() {
@@ -144,6 +144,7 @@ public class EditCustomer extends AppCompatActivity {
         map.put("bill", Integer.parseInt(billAmount.getText().toString()));
         map.put("name", name.getText().toString());
         map.put("address", address.getText().toString());
+        map.put("packageType", packageType.getText().toString());
 
         mDatabase.child("Customers").child(userid).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -160,35 +161,6 @@ public class EditCustomer extends AppCompatActivity {
         });
     }
 
-    private void addContact() {
-        ArrayList<ContentProviderOperation> operationList = new ArrayList<ContentProviderOperation>();
-        operationList.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
-                .build());
-
-        // first and last names
-        operationList.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, name.getText().toString())
-                .withValue(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME, address.getText().toString())
-                .build());
-
-        operationList.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone.getText().toString())
-                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_HOME)
-                .build());
-
-
-        try {
-            ContentProviderResult[] results = getContentResolver().applyBatch(ContactsContract.AUTHORITY, operationList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void getPermissions() {
 
