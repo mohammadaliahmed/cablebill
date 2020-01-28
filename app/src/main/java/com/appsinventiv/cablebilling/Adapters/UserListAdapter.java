@@ -2,18 +2,21 @@ package com.appsinventiv.cablebilling.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.appsinventiv.cablebilling.EditCustomer;
+import com.appsinventiv.cablebilling.Activities.EditCustomer;
 import com.appsinventiv.cablebilling.Models.UserModel;
 import com.appsinventiv.cablebilling.R;
+import com.appsinventiv.cablebilling.Utils.CommonUtils;
+import com.appsinventiv.cablebilling.Utils.SharedPrefs;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
@@ -24,6 +27,13 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     ArrayList<UserModel> itemList;
     ArrayList<UserModel> arrayList;
     UserListCallbacks callbacks;
+    boolean canClick = false;
+    ArrayList<String> sendToList = new ArrayList<>();
+
+    public void setCanClick(boolean canClick) {
+        this.canClick = canClick;
+        notifyDataSetChanged();
+    }
 
     public UserListAdapter(Context context, ArrayList<UserModel> itemList, UserListCallbacks callbacks) {
         this.context = context;
@@ -39,6 +49,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public void setSendToList(ArrayList<String> sendToList) {
+        this.sendToList = sendToList;
+        notifyDataSetChanged();
+    }
 
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
@@ -48,7 +62,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         } else {
             for (UserModel text : arrayList) {
                 if (text.getName().toLowerCase().contains(charText.toLowerCase()) || text.getPhone().contains(charText) || text.getAddress().toLowerCase().contains(charText.toLowerCase())
-                        ) {
+                ) {
                     itemList.add(text);
                 }
             }
@@ -72,22 +86,63 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final UserModel model = itemList.get(position);
+
+        boolean canBill = true;
+        if (sendToList != null && sendToList.size() > 0)
+            if (sendToList.contains(model.getPhone())) {
+                canBill = false;
+                holder.bill.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_red));
+            } else {
+                holder.bill.setBackground(context.getResources().getDrawable(R.drawable.btn_bg));
+                canBill = true;
+            }
+        else {
+            holder.bill.setBackground(context.getResources().getDrawable(R.drawable.btn_bg));
+            canBill = true;
+        }
+
+        if (model.getDueDate() != null) {
+            holder.dueDate.setText("Due Date: " + model.getDueDate() + "-" + CommonUtils.getMonthY(System.currentTimeMillis()));
+        } else {
+            holder.dueDate.setText("");
+        }
+
         holder.name.setText((position + 1) + ") Name: " + model.getName() + "\n    Phone: " + model.getPhone() + "\n    Adr: " + model.getAddress());
         holder.bill.setText("Bill: Rs " + model.getBill() + "/-");
+        final boolean finalCanBill = canBill;
         holder.bill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callbacks.onGenerateBill(model);
+                if (finalCanBill) {
+                    callbacks.onGenerateBill(model);
+                } else {
+                    if(SharedPrefs.getAgent()!=null) {
+                        CommonUtils.showToast("Already billed");
+                    }else{
+                        CommonUtils.showToast("Only agent can bill");
+                    }
+                }
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, EditCustomer.class);
-                i.putExtra("userid", model.getPhone());
+                if (canClick) {
+                    Intent i = new Intent(context, EditCustomer.class);
+                    i.putExtra("userid", model.getPhone());
+                    context.startActivity(i);
+                }
+            }
+        });
+
+        holder.phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(Intent.ACTION_VIEW,Uri.parse("tel:"+model.getPhone()));
                 context.startActivity(i);
             }
         });
+
     }
 
     @Override
@@ -97,12 +152,15 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         Button bill;
-        TextView name;
+        TextView name, dueDate;
+        ImageView phone;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             bill = itemView.findViewById(R.id.bill);
+            dueDate = itemView.findViewById(R.id.dueDate);
             name = itemView.findViewById(R.id.name);
+            phone = itemView.findViewById(R.id.phone);
 
 
         }

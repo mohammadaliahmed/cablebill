@@ -186,7 +186,23 @@ public class CommonUtils {
         Calendar smsTime = Calendar.getInstance();
         smsTime.setTimeInMillis(smsTimeInMilis);
 
+        return DateFormat.format("ddMMyyyy", smsTime).toString();
+
+    }
+
+    public static String getYearMonth(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
         return DateFormat.format("MMyyyy", smsTime).toString();
+
+    }
+
+    public static String getMonthY(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        return DateFormat.format("MM-yyyy", smsTime).toString();
 
     }
 

@@ -1,16 +1,26 @@
 package com.appsinventiv.cablebilling.Models;
 
 public class UserModel {
-    String name,phone,address;
+    String name,phone,address,packageType,dueDate;
     int bill;
     long time;
 
-    public UserModel(String name, String phone, String address, int bill, long time) {
+    public UserModel(String name, String phone, String address, int bill, long time,String packageType,String dueDate) {
         this.name = name;
         this.phone = phone;
         this.address = address;
         this.bill = bill;
         this.time = time;
+        this.packageType = packageType;
+        this.dueDate = dueDate;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
     }
 
     public long getTime() {
@@ -22,6 +32,14 @@ public class UserModel {
     }
 
     public UserModel() {
+    }
+
+    public String getPackageType() {
+        return packageType;
+    }
+
+    public void setPackageType(String packageType) {
+        this.packageType = packageType;
     }
 
     public String getName() {

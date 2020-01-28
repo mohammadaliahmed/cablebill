@@ -7,6 +7,10 @@ import android.content.SharedPreferences;
 //import com.google.gson.reflect.TypeToken;
 //import com.saffron.club.Models.UserModel;
 
+import com.appsinventiv.cablebilling.Models.AgentModel;
+import com.appsinventiv.cablebilling.Models.UserModel;
+import com.google.gson.Gson;
+
 import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -41,7 +45,7 @@ public class SharedPrefs {
 //
 
 
-//    public static void setCartMenuIds(HashMap<Integer, Integer> itemList) {
+    //    public static void setCartMenuIds(HashMap<Integer, Integer> itemList) {
 //
 //        Gson gson = new Gson();
 //        String json = gson.toJson(itemList);
@@ -93,14 +97,55 @@ public class SharedPrefs {
 //
 //    }
 //
-//    public static void setToken(String token) {
-//        preferenceSetter("token", token);
-//    }
-//
-//    public static String getToken() {
-//        return preferenceGetter("token");
-//    }
-//
+    public static void setLoggedInAs(String token) {
+        preferenceSetter("setLoggedIn", token);
+    }
+
+    public static String getLoggedInAs() {
+        return preferenceGetter("setLoggedIn");
+    }
+
+    public static void setLoggedInAsWhichAdmin(String token) {
+        preferenceSetter("setLoggedInAsWhichAdmin", token);
+    }
+
+    public static String getLoggedInAsWhichAdmin() {
+        return preferenceGetter("setLoggedInAsWhichAdmin");
+    }
+
+    public static void setParchiName(String token) {
+        preferenceSetter("setParchiName", token);
+    }
+
+    public static String getParchiName() {
+        return preferenceGetter("setParchiName");
+    }
+
+    public static void setTitle(String token) {
+        preferenceSetter("getTitle", token);
+    }
+
+    public static String getTitle() {
+        return preferenceGetter("getTitle");
+    }
+
+    public static void setAddress(String token) {
+        preferenceSetter("setAddress", token);
+    }
+
+    public static String getAddress() {
+        return preferenceGetter("setAddress");
+    }
+
+    public static void setLogoUrl(String token) {
+        preferenceSetter("setLogoUrl", token);
+    }
+
+    public static String getLogoUrl() {
+        return preferenceGetter("setLogoUrl");
+    }
+
+    //
 //
 //    public static UserModel getParticipantModel(String userId) {
 //        Gson gson = new Gson();
@@ -109,18 +154,18 @@ public class SharedPrefs {
 //    }
 //
 //
-//    public static void setUserModel(UserModel model) {
-//
-//        Gson gson = new Gson();
-//        String json = gson.toJson(model);
-//        preferenceSetter("UserModel", json);
-//    }
-//
-//    public static UserModel getUserModel() {
-//        Gson gson = new Gson();
-//        UserModel model = gson.fromJson(preferenceGetter("UserModel"), UserModel.class);
-//        return model;
-//    }
+    public static void setAgent(AgentModel model) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(model);
+        preferenceSetter("setAgent", json);
+    }
+
+    public static AgentModel getAgent() {
+        Gson gson = new Gson();
+        AgentModel model = gson.fromJson(preferenceGetter("setAgent"), AgentModel.class);
+        return model;
+    }
 
 
     public static void preferenceSetter(String key, String value) {

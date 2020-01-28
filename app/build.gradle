@@ -44,6 +44,9 @@ dependencies {
     implementation 'com.bogdwellers:pinchtozoom:0.1'
     implementation 'com.zhihu.android:matisse:0.5.2'
     implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.google.code.gson:gson:2.6.2'
+    implementation 'com.google.firebase:firebase-storage:17.0.0'
+
 
 
 

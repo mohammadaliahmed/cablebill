@@ -1,50 +1,39 @@
-package com.appsinventiv.cablebilling;
+package com.appsinventiv.cablebilling.Activities;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appsinventiv.cablebilling.Models.BillModel;
-import com.appsinventiv.cablebilling.Models.UserModel;
-import com.appsinventiv.cablebilling.Utils.ApplicationClass;
+import com.appsinventiv.cablebilling.R;
 import com.appsinventiv.cablebilling.Utils.CommonUtils;
-import com.google.android.gms.tasks.OnFailureListener;
+import com.appsinventiv.cablebilling.Utils.SharedPrefs;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Random;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -53,7 +42,7 @@ public class CreateBill extends AppCompatActivity {
 
     TextView userDetails, billAmount, date, number;
 
-    String name, phone, address,packageTypeText;
+    String name, phone, address, packageTypeText;
     int bill;
     Button send;
     RelativeLayout billLayout;
@@ -62,8 +51,10 @@ public class CreateBill extends AppCompatActivity {
 
     DatabaseReference mDatabase;
     private String idddd;
-    EditText recievedBy;
-    TextView recievedByText,packageType;
+    TextView recievedByText, packageType;
+    TextView title, addressTv;
+    ImageView image;
+    private String admin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +68,22 @@ public class CreateBill extends AppCompatActivity {
         getPermissions();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        title = findViewById(R.id.title);
+        addressTv = findViewById(R.id.address);
+        image = findViewById(R.id.image);
+
+
+        title.setText(SharedPrefs.getTitle());
+        addressTv.setText(SharedPrefs.getAddress());
+        Glide.with(this).load(SharedPrefs.getLogoUrl()).into(image);
+
+
         userDetails = findViewById(R.id.userDetails);
         billLayout = findViewById(R.id.billLayout);
         packageType = findViewById(R.id.packageType);
         billAmount = findViewById(R.id.billAmount);
         number = findViewById(R.id.number);
         recievedByText = findViewById(R.id.recievedByText);
-        recievedBy = findViewById(R.id.recievedBy);
         date = findViewById(R.id.date);
         send = findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
@@ -100,31 +100,17 @@ public class CreateBill extends AppCompatActivity {
 
             }
         });
-        recievedBy.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                recievedByText.setText(s.toString());
-            }
-        });
 
 
         bill = getIntent().getIntExtra("bill", 0);
+        admin = getIntent().getStringExtra("admin");
         name = getIntent().getStringExtra("name");
         phone = getIntent().getStringExtra("phone");
         address = getIntent().getStringExtra("address");
         packageTypeText = getIntent().getStringExtra("packageTypeText");
         idddd = CommonUtils.getFormattedDateOnl(System.currentTimeMillis()) + phone;
+
+        recievedByText.setText(SharedPrefs.getParchiName());
 
 
 //        userDetails.setText("Name: " + name + "\nPhone: " + phone + "\nAddr: " + address);
@@ -163,7 +149,8 @@ public class CreateBill extends AppCompatActivity {
     }
 
     private void updateBillToDB() {
-        BillModel model = new BillModel(idddd, bill, System.currentTimeMillis(), name, phone, address);
+        BillModel model = new BillModel(idddd, bill, System.currentTimeMillis(), name, phone, address,
+                SharedPrefs.getAgent().getPhone(), phone,admin);
         mDatabase.child("Bills").child(idddd).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

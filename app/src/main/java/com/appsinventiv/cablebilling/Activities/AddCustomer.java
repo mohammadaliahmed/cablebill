@@ -1,4 +1,4 @@
-package com.appsinventiv.cablebilling;
+package com.appsinventiv.cablebilling.Activities;
 
 import android.Manifest;
 import android.content.ContentProviderOperation;
@@ -20,7 +20,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.appsinventiv.cablebilling.Models.UserModel;
+import com.appsinventiv.cablebilling.R;
 import com.appsinventiv.cablebilling.Utils.CommonUtils;
+import com.appsinventiv.cablebilling.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +38,7 @@ import androidx.core.app.ActivityCompat;
 
 public class AddCustomer extends AppCompatActivity {
     Button save;
-    EditText billAmount, name, phone, address, packageType;
+    EditText billAmount, name, phone, address, packageType, dueDate;
     DatabaseReference mDatabase;
     ArrayList<String> itemList = new ArrayList<>();
 
@@ -54,6 +56,7 @@ public class AddCustomer extends AppCompatActivity {
         name = findViewById(R.id.name);
         phone = findViewById(R.id.phone);
         address = findViewById(R.id.address);
+        dueDate = findViewById(R.id.dueDate);
         packageType = findViewById(R.id.packageType);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         getPermissions();
@@ -70,6 +73,8 @@ public class AddCustomer extends AppCompatActivity {
                     address.setError("Enter address");
                 } else if (billAmount.getText().length() == 0) {
                     billAmount.setError("Enter billAmount");
+                } else if (dueDate.getText().length() == 0) {
+                    dueDate.setError("Enter dueDate");
                 } else {
                     saveData();
                 }
@@ -80,19 +85,6 @@ public class AddCustomer extends AppCompatActivity {
     }
 
     private void saveData() {
-        boolean found = true;
-//        for (String abc : itemList) {
-//            String ph = phone.getText().toString();
-//            ph = ph.substring(0, 8);
-//            if (!abc.contains(ph)) {
-////                addContact();
-//                found=false;
-//
-//            }
-//        }
-//        if(!found){
-//            addContact();
-//        }
         if (!itemList.contains(phone.getText().toString())) {
             addContact();
         }
@@ -101,10 +93,11 @@ public class AddCustomer extends AppCompatActivity {
                 phone.getText().toString(),
                 address.getText().toString(),
                 Integer.parseInt(billAmount.getText().toString()),
-                System.currentTimeMillis(), packageType.getText().toString()
+                System.currentTimeMillis(), packageType.getText().toString(),
+                dueDate.getText().toString()
         );
 
-        mDatabase.child("Customers").child(phone.getText().toString()).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mDatabase.child("Customers").child(SharedPrefs.getLoggedInAsWhichAdmin()).child(phone.getText().toString()).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 CommonUtils.showToast("Data saved");
@@ -121,35 +114,17 @@ public class AddCustomer extends AppCompatActivity {
 
     public void readAllContacts() {
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-
-        // Loop Through All The Numbers
         while (phones.moveToNext()) {
-
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-            // Cleanup the phone number
             phoneNumber = phoneNumber.replaceAll("[()\\s-]+", "");
 
-            // Enter Into Hash Map
-//            namePhoneMap.put(phoneNumber, name);
             if (phoneNumber.length() > 8) {
 
                 itemList.add(phoneNumber);
             }
 
         }
-
-        // Get The Contents of Hash Map in Log
-//        for (Map.Entry<String, String> entry : namePhoneMap.entrySet()) {
-//            String key = entry.getKey();
-////            Log.d(TAG, "Phone :" + key);
-//            String value = entry.getValue();
-////            Log.d(TAG, "Name :" + value);
-////            namePhoneMap.put(value,key);
-//
-//        }
-
         phones.close();
 
     }

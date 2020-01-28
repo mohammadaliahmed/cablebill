@@ -2,10 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.appsinventiv.cablebilling">
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
         android:name=".Utils.ApplicationClass"
@@ -16,16 +17,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
+
+        </activity>
+        <activity android:name=".Activities.AddCustomer" />
+        <activity android:name=".Activities.CreateBill" />
+        <activity android:name=".Activities.EditCustomer" />
+        <activity
+            android:name=".Activities.Splash"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddCustomer" />
-        <activity android:name=".CreateBill" />
-        <activity android:name=".EditCustomer" />
+        <activity android:name=".Activities.LoginActivity" />
+        <activity android:name=".Activities.Admin.AdminScreen" />
+        <activity android:name=".Activities.Agent.AgentScreen" />
+        <activity android:name=".Activities.Admin.ListOfAgents" />
+        <activity android:name=".Activities.Admin.AddAgent" />
+        <activity android:name=".Activities.Agent.BillFromAgent" />
+        <activity android:name=".Activities.Agent.ParchiSettings" />
     </application>
 
 </manifest>

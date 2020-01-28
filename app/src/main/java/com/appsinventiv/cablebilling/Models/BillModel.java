@@ -5,17 +5,44 @@ public class BillModel {
     int billAmount;
     String name, phone,address;
     long time;
+    String billById,billTo,admin;
 
-    public BillModel(String id, int billAmount, long time, String name, String phone, String address) {
+    public BillModel(String id, int billAmount, long time, String name, String phone, String address, String billById, String billTo, String admin) {
         this.id = id;
         this.billAmount = billAmount;
         this.time = time;
         this.name = name;
         this.phone = phone;
-        this.address = address;
+        this.billById = billById;
+        this.billTo = billTo;
+        this.admin = admin;
+    }
+
+    public String getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
     }
 
     public BillModel() {
+    }
+
+    public String getBillTo() {
+        return billTo;
+    }
+
+    public void setBillTo(String billTo) {
+        this.billTo = billTo;
+    }
+
+    public String getBillById() {
+        return billById;
+    }
+
+    public void setBillById(String billById) {
+        this.billById = billById;
     }
 
     public String getId() {

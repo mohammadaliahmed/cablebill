@@ -1,20 +1,25 @@
-package com.appsinventiv.cablebilling.Activities;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package com.appsinventiv.cablebilling.Activities.Agent;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.appsinventiv.cablebilling.Activities.AddCustomer;
+import com.appsinventiv.cablebilling.Activities.Admin.AdminScreen;
+import com.appsinventiv.cablebilling.Activities.CreateBill;
+import com.appsinventiv.cablebilling.Activities.LoginActivity;
+import com.appsinventiv.cablebilling.Activities.MainActivity;
 import com.appsinventiv.cablebilling.Adapters.UserListAdapter;
 import com.appsinventiv.cablebilling.Models.BillModel;
 import com.appsinventiv.cablebilling.Models.UserModel;
@@ -31,20 +36,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class BillFromAgent extends AppCompatActivity {
     RecyclerView recyclerview;
     UserListAdapter adapter;
     private ArrayList<UserModel> itemList = new ArrayList<>();
+    ArrayList<String> sentBillList = new ArrayList<>();
     DatabaseReference mDatabase;
     EditText search;
     RelativeLayout wholeLayout;
-    ArrayList<String> sentBillList = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_bill_from_agent);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -77,25 +86,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onGenerateBill(UserModel model) {
 //                CommonUtils.showToast(model.getName());
-                Intent i = new Intent(MainActivity.this, CreateBill.class);
+                Intent i = new Intent(BillFromAgent.this, CreateBill.class);
                 i.putExtra("name", model.getName());
                 i.putExtra("phone", model.getPhone());
                 i.putExtra("address", model.getAddress());
-                i.putExtra("admin", SharedPrefs.getLoggedInAsWhichAdmin());
+                i.putExtra("admin", SharedPrefs.getAgent().getAdmin());
                 i.putExtra("bill", model.getBill());
                 i.putExtra("packageTypeText", model.getPackageType());
                 startActivity(i);
             }
         });
         recyclerview.setAdapter(adapter);
-        adapter.setCanClick(true);
+        adapter.setCanClick(false);
         getDataFromServer();
         getRecoveryDataFromServer();
 
     }
 
     private void getDataFromServer() {
-        mDatabase.child("Customers").child(SharedPrefs.getLoggedInAsWhichAdmin()).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("Customers").child(SharedPrefs.getAgent().getAdmin()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -167,11 +176,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main2, menu);
         return true;
     }
 
@@ -188,10 +195,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_add) {
-            startActivity(new Intent(MainActivity.this, AddCustomer.class));
-            return true;
-        }
+
 //        if (id == R.id.action_settings) {
 //            startActivity(new Intent(MainActivity.this, AddCustomer.class));
 //            return true;
