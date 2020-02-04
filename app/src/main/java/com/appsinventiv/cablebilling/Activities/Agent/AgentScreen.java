@@ -3,6 +3,7 @@ package com.appsinventiv.cablebilling.Activities.Agent;
 import android.Manifest;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -41,7 +42,7 @@ public class AgentScreen extends AppCompatActivity {
 
 
     CardView customers, settings;
-    HashMap<String,String> phoneContact=new HashMap<>();
+    HashMap<String, String> phoneContact = new HashMap<>();
     private ArrayList<UserModel> customersList = new ArrayList<>();
     DatabaseReference mDatabase;
     TextView recoveryToday, recoveryUsers;
@@ -174,8 +175,10 @@ public class AgentScreen extends AppCompatActivity {
                         if (model != null) {
 //                            customersList.add(model);
 //                            deleteContact(AgentScreen.this,model.getPhone());
-                            if (!phoneContact.containsKey(model.getPhone())) {
-                                addContact(model.getName(), model.getPhone());
+                            if (phoneContact.size() > 0) {
+                                if (!phoneContact.containsKey(model.getPhone())) {
+                                    addContact(model.getName(), model.getPhone());
+                                }
                             }
                         }
                     }
@@ -220,22 +223,21 @@ public class AgentScreen extends AppCompatActivity {
             String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             phoneNumber = phoneNumber.replaceAll("[()\\s-]+", "");
 
-            if (phoneNumber.length() > 8) {
 
-                phoneContact.put(phoneNumber,phoneNumber);
-            }
+            phoneContact.put(phoneNumber, phoneNumber);
+
 
         }
         phones.close();
-        if(phoneContact.size()>0) {
+        if (phoneContact.size() > 0) {
             getAllContactsFromServer();
-
-
         }
 
     }
 
     private void addContact(String name, String phone) {
+
+
         ArrayList<ContentProviderOperation> operationList = new ArrayList<ContentProviderOperation>();
         operationList.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
                 .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
@@ -276,7 +278,7 @@ public class AgentScreen extends AppCompatActivity {
 
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-        }else{
+        } else {
 
         }
     }
