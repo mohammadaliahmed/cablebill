@@ -39,7 +39,7 @@ import androidx.cardview.widget.CardView;
 
 public class AdminScreen extends AppCompatActivity {
     CardView customers, agents, settings;
-    TextView recoveryToday, recoveryMonth, toRecover;
+    TextView recoveryToday, recoveryMonth, toRecover,totalRecovery;
 
     DatabaseReference mDatabase;
     ArrayList<BillModel> dayBillList = new ArrayList<>();
@@ -55,6 +55,7 @@ public class AdminScreen extends AppCompatActivity {
         recoveryMonth = findViewById(R.id.recoveryMonth);
         toRecover = findViewById(R.id.toRecover);
         settings = findViewById(R.id.settings);
+        totalRecovery = findViewById(R.id.totalRecovery);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         this.setTitle("Administration");
 
@@ -183,6 +184,7 @@ public class AdminScreen extends AppCompatActivity {
             }
             int abc = toRecoverTotal - monttotal;
             toRecover.setText("To recover: " + abc);
+            totalRecovery.setText("Total: " + toRecoverTotal);
         }
     }
 

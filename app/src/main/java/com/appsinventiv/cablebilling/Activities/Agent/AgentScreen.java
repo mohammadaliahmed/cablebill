@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -29,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,7 +41,7 @@ public class AgentScreen extends AppCompatActivity {
 
 
     CardView customers, settings;
-    private ArrayList<String> itemList = new ArrayList<>();
+    HashMap<String,String> phoneContact=new HashMap<>();
     private ArrayList<UserModel> customersList = new ArrayList<>();
     DatabaseReference mDatabase;
     TextView recoveryToday, recoveryUsers;
@@ -71,12 +73,10 @@ public class AgentScreen extends AppCompatActivity {
         });
 
         getPermissions();
-        getAllContactsFromServer();
 
+        this.setTitle("Welcome, " + SharedPrefs.getAgent().getName());
         getRecoveryDataFromServer();
         getParchiModelFromServer();
-        this.setTitle("Welcome, " + SharedPrefs.getAgent().getName());
-
 
     }
 
@@ -106,7 +106,7 @@ public class AgentScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    itemList.clear();
+                    phoneContact.clear();
                     dayBillList.clear();
                     monthBill.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -173,9 +173,9 @@ public class AgentScreen extends AppCompatActivity {
                         UserModel model = snapshot.getValue(UserModel.class);
                         if (model != null) {
 //                            customersList.add(model);
-                            String phone = model.getPhone().replace(" ", "").replace("-", "");
-                            if (!itemList.contains(phone)) {
-                                addContact(model.getName(), phone);
+//                            deleteContact(AgentScreen.this,model.getPhone());
+                            if (!phoneContact.containsKey(model.getPhone())) {
+                                addContact(model.getName(), model.getPhone());
                             }
                         }
                     }
@@ -190,6 +190,29 @@ public class AgentScreen extends AppCompatActivity {
         });
     }
 
+    public boolean deleteContact(Context ctx, String phone) {
+        Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phone));
+        Cursor cur = ctx.getContentResolver().query(contactUri, null, null, null, null);
+        try {
+            if (cur.moveToFirst()) {
+                do {
+                    String lookupKey = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                    Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
+                    ctx.getContentResolver().delete(uri, null, null);
+                    return true;
+
+
+                } while (cur.moveToNext());
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+        } finally {
+            cur.close();
+        }
+        return false;
+    }
+
     public void readAllContacts() {
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         while (phones.moveToNext()) {
@@ -199,11 +222,16 @@ public class AgentScreen extends AppCompatActivity {
 
             if (phoneNumber.length() > 8) {
 
-                itemList.add(phoneNumber);
+                phoneContact.put(phoneNumber,phoneNumber);
             }
 
         }
         phones.close();
+        if(phoneContact.size()>0) {
+            getAllContactsFromServer();
+
+
+        }
 
     }
 
@@ -248,6 +276,8 @@ public class AgentScreen extends AppCompatActivity {
 
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }else{
+
         }
     }
 

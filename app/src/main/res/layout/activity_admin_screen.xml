@@ -11,22 +11,49 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/toRecover"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/btn_bg_red"
-            android:gravity="center"
-            android:lines="2"
-            android:padding="5dp"
-            android:text="Recovery Month:"
-            android:textColor="#fff"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+
+            <TextView
+                android:id="@+id/totalRecovery"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+
+                android:background="@drawable/btn_bg_brown"
+
+                android:gravity="center"
+                android:lines="2"
+                android:padding="5dp"
+
+                android:text="Recovery Month:"
+                android:textColor="#fff"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/toRecover"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+
+                android:layout_weight="1"
+                android:background="@drawable/btn_bg_red"
+                android:gravity="center"
+                android:lines="2"
+                android:padding="5dp"
+                android:text="Recovery Month:"
+                android:textColor="#fff"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +66,7 @@
             <TextView
                 android:id="@+id/recoveryMonth"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
@@ -54,7 +81,7 @@
             <TextView
                 android:id="@+id/recoveryToday"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
