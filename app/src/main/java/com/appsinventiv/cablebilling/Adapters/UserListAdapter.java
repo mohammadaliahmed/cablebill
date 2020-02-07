@@ -73,6 +73,27 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
 
     }
 
+    public void filterDate(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        itemList.clear();
+        if (charText.length() == 0) {
+            itemList.addAll(arrayList);
+        } else {
+            for (UserModel text : arrayList) {
+                if (text.getDueDate() != null) {
+                    if (text.getDueDate().toLowerCase().contains(charText.toLowerCase())
+                    ) {
+                        itemList.add(text);
+                    }
+                }
+            }
+
+
+        }
+        notifyDataSetChanged();
+
+    }
+
 
     @NonNull
     @Override
@@ -116,9 +137,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
                 if (finalCanBill) {
                     callbacks.onGenerateBill(model);
                 } else {
-                    if(SharedPrefs.getAgent()!=null) {
+                    if (SharedPrefs.getAgent() != null) {
                         CommonUtils.showToast("Already billed");
-                    }else{
+                    } else {
                         CommonUtils.showToast("Only agent can bill");
                     }
                 }
@@ -138,7 +159,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         holder.phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(Intent.ACTION_VIEW,Uri.parse("tel:"+model.getPhone()));
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + model.getPhone()));
                 context.startActivity(i);
             }
         });

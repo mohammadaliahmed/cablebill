@@ -69,7 +69,8 @@ public class AgentScreen extends AppCompatActivity {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgentScreen.this, ParchiSettings.class));
+                startActivity(new Intent(AgentScreen.this, ContactsSettings.class));
+
             }
         });
 
@@ -177,7 +178,7 @@ public class AgentScreen extends AppCompatActivity {
 //                            deleteContact(AgentScreen.this,model.getPhone());
                             if (phoneContact.size() > 0) {
                                 if (!phoneContact.containsKey(model.getPhone())) {
-                                    addContact(model.getName(), model.getPhone());
+//                                    addContact(model.getName(), model.getPhone());
                                 }
                             }
                         }
@@ -217,21 +218,21 @@ public class AgentScreen extends AppCompatActivity {
     }
 
     public void readAllContacts() {
-        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        while (phones.moveToNext()) {
-            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            phoneNumber = phoneNumber.replaceAll("[()\\s-]+", "");
-
-
-            phoneContact.put(phoneNumber, phoneNumber);
-
-
-        }
-        phones.close();
-        if (phoneContact.size() > 0) {
-            getAllContactsFromServer();
-        }
+//        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+//        while (phones.moveToNext()) {
+//            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+//            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//            phoneNumber = phoneNumber.replaceAll("[()\\s-]+", "");
+//
+//
+//            phoneContact.put(phoneNumber, phoneNumber);
+//
+//
+//        }
+//        phones.close();
+//        if (phoneContact.size() > 0) {
+//            getAllContactsFromServer();
+//        }
 
     }
 

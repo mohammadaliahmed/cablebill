@@ -12,17 +12,40 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/search"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:background="@drawable/edit_text_bg"
-            android:gravity="center"
-            android:hint="Search.."
-            android:inputType="text"
-            android:padding="10dp" />
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <EditText
+                android:id="@+id/dueDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text_bg"
+                android:gravity="center"
+                android:hint="Due Date"
+                android:inputType="text"
+                android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text_bg"
+                android:gravity="center"
+                android:hint="Search.."
+                android:inputType="text"
+                android:padding="10dp" />
+
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
@@ -34,12 +57,13 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:alpha="0.8"
-
         android:id="@+id/wholeLayout"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff">
+        android:alpha="0.8"
+        android:background="#fff"
+        android:visibility="gone">
 
         <ProgressBar
             android:layout_width="wrap_content"

@@ -47,7 +47,7 @@ public class BillFromAgent extends AppCompatActivity {
     private ArrayList<UserModel> itemList = new ArrayList<>();
     ArrayList<String> sentBillList = new ArrayList<>();
     DatabaseReference mDatabase;
-    EditText search;
+    EditText search, dueDate;
     RelativeLayout wholeLayout;
 
     @Override
@@ -61,6 +61,7 @@ public class BillFromAgent extends AppCompatActivity {
         this.setTitle("Customers");
         wholeLayout = findViewById(R.id.wholeLayout);
         search = findViewById(R.id.search);
+        dueDate = findViewById(R.id.dueDate);
         recyclerview = findViewById(R.id.recyclerview);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -79,6 +80,22 @@ public class BillFromAgent extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 adapter.filter(s.toString());
+            }
+        });
+        dueDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                adapter.filterDate(s.toString());
             }
         });
         recyclerview.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));

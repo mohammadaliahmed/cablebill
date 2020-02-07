@@ -39,6 +39,7 @@
         <activity android:name=".Activities.Admin.AddAgent" />
         <activity android:name=".Activities.Agent.BillFromAgent" />
         <activity android:name=".Activities.Agent.ParchiSettings" />
+        <activity android:name=".Activities.Agent.ContactsSettings" />
     </application>
 
 </manifest>

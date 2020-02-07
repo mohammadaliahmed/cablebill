@@ -33,6 +33,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/phone"
                 android:layout_width="match_parent"
+                android:digits="0123456789"
                 android:layout_height="wrap_content"
                 android:hint="Phone"
                 android:inputType="phone" />
